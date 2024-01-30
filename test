@@ -1,0 +1,23 @@
+import tensorflow as tf
+from tensorflow.keras.preprocessing import image
+import numpy as np
+from PIL import Image
+
+# Load the model
+model = tf.keras.models.load_model('modelliv.h5')
+
+# Function to prepare the image
+def prepare_image(img_path, target_size):
+    img = Image.open(img_path)
+    img = img.resize(target_size, Image.ANTIALIAS)
+    img_array = image.img_to_array(img)
+    img_array = np.expand_dims(img_array, axis=0)  # Add batch dimension
+    return img_array
+
+# Prepare your image (change 'path_to_your_liver_image.jpg' to your image's path)
+img_path = 'path_to_your_liver_image.jpg'
+prepared_img = prepare_image(img_path, target_size=(224, 224))  # Change target_size to match your model's expected input size
+
+# Predict
+predictions = model.predict(prepared_img)
+print(predictions)
